@@ -1,6 +1,8 @@
-export default [
-    'cedric.hiely@billed.com',
-    'christian.saluzzo@billed.com',
-    'jean.limbert@billed.com',
-    'joanna.binet@billed.com'
+const tests = [
+	'cedric.hiely@billed.com',
+	'christian.saluzzo@billed.com',
+	'jean.limbert@billed.com',
+	'joanna.binet@billed.com'
 ]
+
+export default tests
