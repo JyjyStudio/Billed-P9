@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const mockedBills = {
 	list() {
 		return Promise.resolve([{
