@@ -15,7 +15,7 @@ export default class {
 				icon.addEventListener('click', () => this.handleClickIconEye(icon))
 			})
 		} catch (error) {
-			console.error(error)			
+			return	
 		}
 		new Logout({ document, localStorage, onNavigate })
 	}
