@@ -139,8 +139,7 @@ export default class {
 			this.counter ++
 		} else { // si on le ferme
 			$(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
-			$(`#status-bills-container${this.index}`)
-				.html('')
+			$(`#status-bills-container${this.index}`).html('')
 			this.counter ++
 		}
 		bills.forEach(bill => {
