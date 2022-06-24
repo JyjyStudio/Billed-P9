@@ -11,11 +11,8 @@ import { ROUTES_PATH} from '../constants/routes.js'
 import {localStorageMock} from '../__mocks__/localStorage.js'
 import router from '../app/Router.js'
 import mockedBills from '../__mocks__/store.js'
-// import {setLocalStorage} from '../../setup-jest'
-
-
 const onNavigate = () => {return}
-// setLocalStorage('Employee')
+
 
 describe('Given I am connected as an employee', () => {
 	describe('When I am on Bills Page', () => {		
