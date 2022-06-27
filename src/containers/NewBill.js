@@ -19,10 +19,10 @@ export default class NewBill {
 	handleChangeFile = e => {
 		this.formData = new FormData()
 		this.file = this.fileInput.files[0]
-		this.fileExtension = this.file.type.replace(/(.*)\//g, '')
+		this.fileExtension = this.file.name.split('.').pop()
+		const acceptedExtensions = ['jpg','jpeg','png'].includes(this.fileExtension)
 		const email = JSON.parse(localStorage.getItem('user')).email
-
-		if (this.fileExtension) {
+		if (acceptedExtensions) {
 			this.document.querySelector('.error--image-entension').style.display = 'none'
 			this.fileUrl = e.target.value
 			this.fileName = this.file.name
