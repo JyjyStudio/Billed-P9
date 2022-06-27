@@ -8,6 +8,7 @@ import NewBillUI from '../views/NewBillUI.js'
 import NewBill from '../containers/NewBill.js'
 import { setLocalStorage } from '../../setup-jest'
 import store from '../__mocks__/store.js'
+import userEvent from '@testing-library/user-event'
 // import userEvent from '@testing-library/user-event'
 
 //setup
@@ -114,29 +115,17 @@ describe('Given I am connected as an employee', () => {
 					fileUrl: 'https://jyjystudio.github.io/test.jpg',
 				}
 				const handleSubmit = jest.fn((e) => newBill.handleSubmit(e))
-				newBill.createBill = (newBill) => newBill
-				document.querySelector(
-					'input[data-testid="expense-name"]'
-				).value = validBill.name
-				document.querySelector(
-					'input[data-testid="datepicker"]'
-				).value = validBill.date
-				document.querySelector(
-					'select[data-testid="expense-type"]'
-				).value = validBill.type
-				document.querySelector('input[data-testid="amount"]').value =
-					validBill.amount
-				document.querySelector('input[data-testid="vat"]').value =
-					validBill.vat
-				document.querySelector('input[data-testid="pct"]').value =
-					validBill.pct
-				document.querySelector(
-					'textarea[data-testid="commentary"]'
-				).value = validBill.commentary
+				document.querySelector('input[data-testid="expense-name"]').value = validBill.name
+				document.querySelector('input[data-testid="datepicker"]').value = validBill.date
+				document.querySelector('select[data-testid="expense-type"]').value = validBill.type
+				document.querySelector('input[data-testid="amount"]').value = validBill.amount
+				document.querySelector('input[data-testid="vat"]').value = validBill.vat
+				document.querySelector('input[data-testid="pct"]').value = validBill.pct
+				document.querySelector('textarea[data-testid="commentary"]').value = validBill.commentary
 				newBill.fileUrl = validBill.fileUrl
 				newBill.fileName = validBill.fileName
 				submit.addEventListener('click', handleSubmit)
-				fireEvent.click(submit)
+				userEvent.click(submit)
 				expect(handleSubmit).toHaveBeenCalled()
 			})
 		})
