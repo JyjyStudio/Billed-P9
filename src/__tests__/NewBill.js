@@ -9,11 +9,17 @@ import NewBill from '../containers/NewBill.js'
 import { setLocalStorage } from '../../setup-jest'
 import store from '../__mocks__/store.js'
 import userEvent from '@testing-library/user-event'
-// import userEvent from '@testing-library/user-event'
+import mockStore from '../__mocks__/store'
+import BillsUI from '../views/BillsUI.js'
+import { ROUTES} from '../constants/routes.js'
+import router from '../app/Router.js'
+import { bills } from '../fixtures/bills.js'
+import {localStorageMock} from '../__mocks__/localStorage.js'
+
 
 //setup
-const onNavigate = () => {
-	return
+const onNavigate = (pathname) => {
+	document.body.innerHTML = ROUTES({ pathname, data: bills })
 }
 setLocalStorage('Employee')
 Object.defineProperty(window, 'location', {
@@ -130,4 +136,89 @@ describe('Given I am connected as an employee', () => {
 			})
 		})
 	})
+	
+	// test d'intégration POST
+	describe('Given I am a user connected as Employee', () => {
+		describe('When I do fill required fileds in good format and I click on submit button', () => {
+			test('Then Add new bill to mock API POST', async () => {
+				const html = NewBillUI()
+				document.body.innerHTML = html  
+			
+				const createdBill = new NewBill({
+					document,
+					onNavigate,
+					store: mockStore,
+					localStorage: window.localStorage,
+				})
+				expect(createdBill).toBeDefined()
+				expect(screen.getByText('Envoyer une note de frais')).toBeTruthy()
+				const billToTest = {
+					id: 'BeKy598729423xZ',
+					vat: '10',
+					amount: 50,
+					name: 'test de la méthode post',
+					fileName: 'jyhad.jpeg',
+					commentary: 'test post newbill',
+					pct: 20,
+					type: 'Transports',
+					email: 'a@a',
+					fileUrl:
+					'https://jyhad.jpg',
+					date: '2022-06-24',
+					status: 'pending',
+					commentAdmin: 'euh',
+				}
+				const handleSubmit = jest.spyOn(createdBill, 'handleSubmit')
+				const form = screen.getByTestId('form-new-bill')
+				form.addEventListener('submit', handleSubmit)
+				fireEvent.submit(form)     
+				expect(handleSubmit).toHaveBeenCalled()
+
+				const getSpy = jest.spyOn(mockStore, 'bills')
+  
+				const billTested = await mockStore.bills().update(billToTest)
+
+				expect(getSpy).toHaveBeenCalledTimes(1) 
+				expect(billTested.id).toBe('47qAXb6fIm2zOKkLzMro')
+			})
+		})
+		describe('When an error occurs on API', () => {
+			beforeEach(() => {
+				jest.spyOn(mockStore, 'bills')
+				Object.defineProperty(
+					window,
+					'localStorage',
+					{ value: localStorageMock }
+				)
+				window.localStorage.setItem('user', JSON.stringify({
+					type: 'Employee',
+					email: 'a@a'
+				}))
+				const root = document.createElement('div')
+				root.setAttribute('id', 'root')
+				document.body.appendChild(root)
+				router()
+			}) 
+			test('fetches bills from an API and fails with 404 message error', () => {
+				mockStore.bills.mockImplementationOnce(() =>
+					Promise.reject(new Error('Erreur 500'))
+				)
+				const html = BillsUI({ error: 'Erreur 500' })
+				document.body.innerHTML = html
+				const message = screen.getByText(/Erreur 500/)
+				expect(message).toBeTruthy()
+			})
+	
+			test('fetches messages from an API and fails with 500 message error', () => {
+				mockStore.bills.mockImplementationOnce(() =>
+					Promise.reject(new Error('Erreur 500'))
+				)
+				const html = BillsUI({ error: 'Erreur 500' })
+				document.body.innerHTML = html
+				const message = screen.getByText(/Erreur 500/)
+				expect(message).toBeTruthy()
+			})
+		})
+	})
+  
 })
