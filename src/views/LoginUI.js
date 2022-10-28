@@ -12,7 +12,7 @@ export default () => {
 			</div>
 			</div>
 			<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-6" style="margin-bottom: 1rem">
 				<div class="card">
 				<div class="card-body">
 					<form class="form-signin" data-testid="form-employee">
